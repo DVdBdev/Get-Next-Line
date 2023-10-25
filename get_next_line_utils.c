@@ -6,7 +6,7 @@
 /*   By: dvan-den <dvan-den@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 20:09:55 by dvan-den          #+#    #+#             */
-/*   Updated: 2023/10/25 05:12:59 by dvan-den         ###   ########.fr       */
+/*   Updated: 2023/10/25 06:11:12 by dvan-den         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*cleanup_and_return(char *value, char *buffer)
 	return (value);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	if (!s)
 		return (0);
@@ -34,7 +34,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	size_t	i;
 
@@ -44,30 +44,30 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strjoin(const char *processed_str, const char *buffer)
+char	*ft_strjoin(char *s, char *b)
 {
-	int		str_len;
-	int		buffer_len;
 	char	*result;
 	int		i;
+	int		j;
 
-	if (!processed_str)
-		processed_str = "";
-	if (!buffer)
+	if (!s)
+	{
+		s = (char *)malloc(sizeof(char));
+		s[0] = '\0';
+	}
+	if (!b || !s)
 		return (NULL);
-	str_len = ft_strlen(processed_str);
-	buffer_len = ft_strlen(buffer);
-	result = (char *)malloc((str_len + buffer_len + 1) * sizeof(char));
+	result = (char *)malloc((ft_strlen(s) + ft_strlen(b) + 1) * sizeof(char));
 	if (!result)
 		return (NULL);
 	i = -1;
-	while (++i < str_len)
-		result[i] = processed_str[i];
-	i = -1;
-	while (++i < buffer_len)
-		result[str_len + i] = buffer[i];
-	result[str_len + buffer_len] = '\0';
-	if (processed_str[0] != '\0')
-		free((void *)processed_str);
+	j = 0;
+	if (s)
+		while (s[++i])
+			result[i] = s[i];
+	while (b[j])
+		result[i++] = b[j++];
+	result[ft_strlen(s) + ft_strlen(b)] = '\0';
+	free(s);
 	return (result);
 }

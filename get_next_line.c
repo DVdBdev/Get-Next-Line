@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
 
 static char	*extract_line(char	*processed_str)
 {
@@ -50,15 +48,11 @@ static char	*get_processed_str(int fd, char *processed_str)
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	while (1)
+	while (!ft_strchr(processed_str, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (cleanup_and_return(NULL, buffer));
-		if (bytes_read == 0)
-			break ;
-		if (ft_strchr(processed_str, '\n'))
-			return (cleanup_and_return(processed_str, buffer));
 		buffer[bytes_read] = '\0';
 		processed_str = ft_strjoin(processed_str, buffer);
 	}
@@ -91,33 +85,6 @@ static char	*get_new_processed_str(char *processed_str)
 	return (cleanup_and_return(new, processed_str));
 }
 
-/**
- * get_next_line - Read and extract the next line from 
- * 				   a file descriptor.
- *
- * @param fd: The file descriptor to read from.
- *
- * @return:
- * - On success: A dynamically allocated string containing 
- *               the next line from the file.
- * - When there are no more lines to read: NULL.
- * - On error: NULL (e.g., for invalid file descriptor or 
- *             memory allocation failure).
- *
- * Description:
- * The get_next_line function reads data from the file 
- * descriptor 'fd' and returns the next complete line. 
- * It uses a static string 'processed_str' to store and
- * manage leftover data between calls. The function extracts
- * lines from 'processed_str' one at a time and appends them 
- * to 'processed_str' after each read. This allows the function 
- * to work with data that might be fragmented across multiple reads.
- * The caller is responsible for freeing the dynamically allocated 
- * string returned by this function to prevent memory leaks.
- * 
- * credit comment block: 
- * Thank you for the explaination @chatgpt :)
- */
 char	*get_next_line(int fd)
 {
 	char		*line;

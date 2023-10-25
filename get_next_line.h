@@ -16,13 +16,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000
+#  define BUFFER_SIZE 1
 # endif
 
 char	*get_next_line(int fd);
 char	*cleanup_and_return(char *value, char *buffer);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(const char *processed_str, const char *buffer);
-size_t	ft_strlen(const char *str);
+char	*ft_strchr(char *s, int c);
+char	*ft_strjoin(char *processed_str, char *buffer);
+size_t	ft_strlen(char *str);
 
 #endif
