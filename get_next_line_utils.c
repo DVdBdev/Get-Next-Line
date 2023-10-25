@@ -6,11 +6,12 @@
 /*   By: dvan-den <dvan-den@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 20:09:55 by dvan-den          #+#    #+#             */
-/*   Updated: 2023/10/25 04:31:37 by dvan-den         ###   ########.fr       */
+/*   Updated: 2023/10/25 05:12:59 by dvan-den         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*cleanup_and_return(char *value, char *buffer)
 {
@@ -20,6 +21,8 @@ char	*cleanup_and_return(char *value, char *buffer)
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (!s)
+		return (0);
 	while (*s)
 	{
 		if (*s == c)
