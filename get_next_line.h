@@ -14,11 +14,15 @@
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
+# include <unistd.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1000
 # endif
 
 char	*get_next_line(int fd);
-char	*get_processed_str(int fd, char *processed_str);
+char	*cleanup_and_return(char *value, char *buffer);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(const char *processed_str, const char *buffer);
+size_t	ft_strlen(const char *str);
 
 #endif
