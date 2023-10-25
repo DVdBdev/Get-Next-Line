@@ -48,6 +48,7 @@ static char	*get_processed_str(int fd, char *processed_str)
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
+	bytes_read = 1;
 	while (!ft_strchr(processed_str, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
