@@ -13,16 +13,25 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <stdlib.h>
 # include <unistd.h>
+# include <stdlib.h>
+
+# define MAX_BUFFER_SIZE 4096
+
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 16
+# else
+#  if BUFFER_SIZE > MAX_BUFFER_SIZE
+#   undef BUFFER_SIZE
+#   define BUFFER_SIZE MAX_BUFFER_SIZE
+#  endif
 # endif
 
 char	*get_next_line(int fd);
-char	*cleanup_and_return(char *value, char *buffer);
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *processed_str, char *buffer);
-size_t	ft_strlen(char *str);
+size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	*free_stash(char **stash, int create_line);
 
 #endif
