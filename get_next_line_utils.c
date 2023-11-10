@@ -6,12 +6,13 @@
 /*   By: dvan-den <dvan-den@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 20:09:55 by dvan-den          #+#    #+#             */
-/*   Updated: 2023/11/10 10:27:32 by dvan-den         ###   ########.fr       */
+/*   Updated: 2023/11/10 10:39:45 by dvan-den         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// Calculates the length of a null-terminated string 's'.
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -22,6 +23,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
+// Duplicates a null-terminated string 's1' dynamically.
 char	*ft_strdup(const char *s1)
 {
 	char	*res;
@@ -40,61 +42,66 @@ char	*ft_strdup(const char *s1)
 	return (res);
 }
 
+// Concatenates two null-terminated strings 's1' and 's2' dynamically.
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*res;
+	char	*result;
 	size_t	i;
 	size_t	j;
 
 	if (!s1 || !s2)
 		return (NULL);
-	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!res)
+	result = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!result)
 		return (NULL);
 	i = 0;
 	while (s1[i] != '\0')
 	{
-		res[i] = s1[i];
+		result[i] = s1[i];
 		i++;
 	}
 	j = 0;
 	while (s2[j] != '\0')
 	{
-		res[i] = s2[j];
+		result[i] = s2[j];
 		i++;
 		j++;
 	}
-	res[i] = '\0';
-	return (res);
+	result[i] = '\0';
+	return (result);
 }
 
+// Extracts a substring from the input string 's', 
+// starting from 'start' with a length of 'len'.
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*res;
+	char	*result;
 	size_t	i;
 	size_t	j;
-	size_t	calc_len;
+	size_t	len_s;
 
-	calc_len = ft_strlen(s);
+	len_s = ft_strlen(s);
 	if (!s || len <= 0)
 		return (NULL);
-	if (len > calc_len)
-		len = calc_len;
-	res = malloc(sizeof(char) * (len + 1));
-	if (!res)
+	if (len > len_s)
+		len = len_s;
+	result = malloc(sizeof(char) * (len + 1));
+	if (!result)
 		return (NULL);
 	i = start;
 	j = 0;
-	while (i < calc_len && j < len)
+	while (i < len_s && j < len)
 	{
-		res[j] = s[i];
+		result[j] = s[i];
 		i++;
 		j++;
 	}
-	res[j] = '\0';
-	return (res);
+	result[j] = '\0';
+	return (result);
 }
 
+// Frees the memory allocated for 'stash'. If 'create_line' is 0, 
+// frees 'stash'; if 1, creates a line from 'stash' and then frees 'stash'.
 void	*free_stash(char **stash, int create_line)
 {
 	char	*line;

@@ -6,24 +6,27 @@
 /*   By: dvan-den <dvan-den@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 20:09:50 by dvan-den          #+#    #+#             */
-/*   Updated: 2023/11/10 10:27:13 by dvan-den         ###   ########.fr       */
+/*   Updated: 2023/11/10 10:35:32 by dvan-den         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*copy_to_stash(char *stash, char *buf)
+// Copies the content of 'buffer' into 'stash'. 
+// If 'stash' is NULL, duplicates 'buffer'.
+// Frees the old 'stash' if it exists.
+static char	*copy_to_stash(char *stash, char *buffer)
 {
 	char	*temp;
-	char	*res;
+	char	*result;
 
-	res = 0;
-	if (!stash && buf)
+	result = 0;
+	if (!stash && buffer)
 	{
-		res = ft_strdup(buf);
-		if (!res)
-			return (free_stash(&res, 0));
-		return (res);
+		result = ft_strdup(buffer);
+		if (!result)
+			return (free_stash(&result, 0));
+		return (result);
 	}
 	temp = ft_strdup(stash);
 	if (!temp)
@@ -32,29 +35,31 @@ static char	*copy_to_stash(char *stash, char *buf)
 		return (free_stash(&temp, 0));
 	}
 	free_stash(&stash, 0);
-	res = ft_strjoin(temp, buf);
-	if (!res)
-		free_stash(&res, 0);
+	result = ft_strjoin(temp, buffer);
+	if (!result)
+		free_stash(&result, 0);
 	free_stash(&temp, 0);
-	return (res);
+	return (result);
 }
 
-static int	has_newline(char *s)
+// Checks if the given string 'stash' contains a newline character.
+static int	has_newline(char *stash)
 {
 	size_t	i;
 
-	if (!s)
+	if (!stash)
 		return (0);
 	i = 0;
-	while (s[i] != '\0')
+	while (stash[i] != '\0')
 	{
-		if (s[i] == '\n')
+		if (stash[i] == '\n')
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
+// Extracts a line from the 'stash' until the first newline character.
 static char	*extract_line(char *stash)
 {
 	char	*line;
@@ -79,10 +84,11 @@ static char	*extract_line(char *stash)
 	return (line);
 }
 
+// Creates a new 'stash' by removing the first line (until the first newline).
 static char	*remake_stash(char *stash)
 {
 	size_t	i;
-	char	*res;
+	char	*result;
 
 	i = 0;
 	if (!stash)
@@ -91,34 +97,35 @@ static char	*remake_stash(char *stash)
 		i++;
 	if (stash[i + 1] == '\0')
 		return (free_stash(&stash, 0));
-	res = ft_substr(stash, i + 1, ft_strlen(stash));
-	if (!res)
+	result = ft_substr(stash, i + 1, ft_strlen(stash));
+	if (!result)
 	{
 		free_stash(&stash, 0);
 		return (NULL);
 	}
 	free_stash(&stash, 0);
-	return (res);
+	return (result);
 }
 
+// Main function to read lines from a file descriptor 'fd'.
 char	*get_next_line(int fd)
 {
-	char		buf[BUFFER_SIZE + 1];
-	long		ret;
+	char		buffer[BUFFER_SIZE + 1];
+	long		bytes_read;
 	static char	*stash = NULL;
 	char		*line;
 
 	line = 0;
-	ret = BUFFER_SIZE;
+	bytes_read = BUFFER_SIZE;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (free_stash(&stash, 0));
-	while (ret > 0)
+	while (bytes_read > 0)
 	{
-		ret = read(fd, buf, BUFFER_SIZE);
-		if ((ret <= 0 && !stash) || ret == -1)
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if ((bytes_read <= 0 && !stash) || bytes_read == -1)
 			return (free_stash(&stash, 0));
-		buf[ret] = '\0';
-		stash = copy_to_stash(stash, buf);
+		buffer[bytes_read] = '\0';
+		stash = copy_to_stash(stash, buffer);
 		if (has_newline(stash))
 		{
 			line = extract_line(stash);
